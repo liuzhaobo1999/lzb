@@ -1,0 +1,252 @@
+# 注释规范
+
+## 规范目的
+编写注释属于编码流程的一部分，此过程十分非常重要，清晰的注释能让你的 `code` 被阅读显得易于理解，提高队友之间的合作效率，在写代码的时候一定要注意注释的规范。
+
+##  注释准则
+
+- 精简 即 简洁，用最简短的语言全面清晰描述
+
+- 遵循 `phpdoc` 规范
+
+- 使用专业术语表达
+
+
+## 注释规范优点
+
+- 关键核心逻辑注释、易于对业务流程实现的理解，即提高代码的可读性
+
+- 代码注释减少团队之间无必要的沟通，提高开发效率
+
+- 提高项目代码的可维护性
+
+- 遵循 `phpDoc` 规范，让 `IDE` 更加懂你，即代码智能提示
+
+- 可让注释生成接口文档，根据 `phpDoc` 智能生成文，比如 `phpApi`
+
+
+
+## 注释类型
+
+- 文档性注释
+
+- `phpDoc` 注释
+
+
+
+## `phpDoc` 标记注释列表
+
+[phpdoc老家](https://docs.phpdoc.org/references/phpdoc/index.html)
+
+```php
+/**
+@api
+API接口
+格式@api uri
+示例@api /api/user/status
+
+@author
+作者
+格式@author 名称 邮箱
+示例@author xxx <xxx@feizhiyi.com>
+
+@copyright
+版权声明
+格式@copyright 描述
+例如@copyright 2014-2019 xxx
+
+@deprecated
+废弃使用，针对将废弃的函数、类
+格式@deprecated 版本号 描述说明
+示例@deprecated 1.2.3 流程拆分废弃此方法
+
+@example
+示例
+格式@example 方法 描述
+示例@example IdentityCard::age() 获取年龄
+
+@filesource
+资源文件
+格式@filesource 句柄描述
+示例@filesource 标注后图片文件
+
+@global
+全局
+格式@global 类型 名称 描述
+格式@global string name 名字
+
+@ignore
+忽略
+格式@ignore 描述
+示例@ignore 这里忽略了
+
+@internal
+仅限内部使用
+格式@internal 说明
+示例@internal 内部系统接口
+
+@license
+协议
+格式@license 名称 URL
+格式@license MIT 假装这是MIT协议地址
+
+@link
+辅助文档链接
+格式@link URL 说明
+示例@link https://feizhiyi.com/doc/apidoc 这里相关的说明
+
+@method
+方法
+格式@method 类型 方法名称 ...方法参数 说明
+@method string handler(int $seq)
+
+@package
+包 即命名空间
+格式@package 命名空间
+示例@package feizhiyi\Helper\ResponseHelper
+
+@param
+参数
+格式@param 类型 名称 说明
+示例@param string name 名字
+
+@property
+类属性
+格式@property 类型 名称 说明
+示例@property string name 名字
+
+@property-read
+只读类属性
+格式@property 类型 名称 说明
+示例@property string name 名字
+
+@property-write
+只写类属性
+格式@property 类型 名称 说明
+示例@property string name 名字
+
+@return
+返回值
+格式@return 类型 说明
+格式@return boolean 处理结果
+
+@see
+参考、一般与@deprecated结合使用
+格式@see 方法 描述
+示例@see \feizhiyi\Helper\ResponseHelper::result(array $codeEnum,$data) 报文响应
+
+@since
+自从版本开始
+格式@since 版本号 描述
+示例@since 1.2.3 自大此时开始使用
+
+@source
+结构元素的源代码
+@subpackage
+@throws
+@todo
+@uses & @used-by
+@var
+@version
+*/
+```
+
+
+
+如上是主流规范标签，主要是做大致了解，过多会影响代码的阅读性 以及 项目代码优雅型，最终约定如下注释分类项。
+
+
+
+## 注释模块注释约定
+
+#### 类头部注释
+
+包含文件功能的简述、详细描述、命名空间、版本、作者
+
+- 规范约定示例
+
+```PHP
+/**
+* 身份证类
+* 用于根据身份证号码获取年龄、性别、生日、星座、地区编码等
+* @package feizhiyi\IdentifyCard\IdentifyCard
+* @version 1.0.0
+* @author xxxx
+*/
+```
+
+- `IDE`配置
+
+```PHP
+/**
+* Class ${NAME}
+* todo describe ...
+#if (${NAMESPACE}) * @package ${NAMESPACE}
+#end
+* @version 1.0.0
+* @author xxxx x@xxxxxx.com
+*/
+```
+
+###### 函数注释
+
+包含函数名称、函数功能作用描述、参数、异常、返回值、作者信息
+
+- 规范约定示例
+
+```php
+/**
+* 计算年龄
+* 根据身份证号码计算年龄
+* @param  string $id 身份证号码
+* @return integer
+* @throws CertificateException
+* @author xxxx xxxx@xxxxx.com
+*/
+```
+
+- `IDE` 配置
+
+```php
+/**
+todo function
+todo describe ...
+${PARAM_DOC}
+#if (${TYPE_HINT} != "void") * @return ${TYPE_HINT}
+#end
+${THROWS_DOC}
+@author ${USER}
+*/
+```
+
+###### 核心业务逻辑注释
+
+对于业务逻辑复杂 或 特定业务规则 的代码片段请务必编写注释
+
+- 单行注释 - 用于变量或者流程概述
+
+  > 务必注释符号后添补空格
+
+```php
+// 获取请求的票据
+$sequence = request('body.sequence');
+
+// 使用缓存( Redis )策略,获取正在就读的所有学生 学号 与 姓名 信息集合
+$students = Cache::remember(CacheKey::STUDENT,self::EXPIRED_TIME,function () use ($model){
+  return $model->status()->select('id','name')->get();
+});
+```
+
+- 多行注释 - 一般用于核心步骤的诠释
+
+  > 诠释流程 或详细描述 或注释单元项归类总称
+
+```php
+/**
+* 获取算法容器的摘要信息
+* 由容器的物理地址、磁盘序列号信息构建而成
+*/
+```
+
+  
+
